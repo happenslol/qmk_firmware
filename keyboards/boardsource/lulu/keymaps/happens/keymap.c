@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
+#include "encoder.h"
 
 enum layers {
-    _QWERTY,
+    _BASE,
     _LOWER,
     _RAISE,
     _FN,
@@ -29,7 +30,7 @@ enum layers {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-[_QWERTY] = LAYOUT(
+[_BASE] = LAYOUT(
   KC_ESC,   KC_HOME, KC_END,  KC_INS,  KC_PGDN, KC_PGUP,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_DEL,  KC_BSPC,
   KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LALT,
   KC_LSFT,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
@@ -41,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,  _______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______,
   _______,  KC_1,    KC_2,    KC_3,    KC_0,    _______,                     _______, _______, _______, _______, _______, _______,
   _______,  KC_4,    KC_5,    KC_6,    _______, _______,                     _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, _______,
-  _______,  KC_7,    KC_8,    KC_9,    _______, _______, _______,   _______, _______, _______, _______, _______, _______, _______,
+  _______,  KC_7,    KC_8,    KC_9,    _______, _______, KC_MUTE,   _______, _______, _______, _______, _______, _______, _______,
                               _______, _______, _______, _______,   _______, _______, _______, _______
 ),
 
@@ -65,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,  _______, _______, _______, _______, _______,                     RGB_VAD, RGB_VAI, _______, _______, _______, _______,
   _______,  RGB_M_P, RGB_M_B, RGB_M_SW,_______, _______,                     RGB_HUD, RGB_HUI, _______, _______, _______, _______,
   _______,  _______, _______, _______, _______, _______,                     RGB_SAD, RGB_SAI, _______, _______, _______, _______,
-  QK_BOOT,  _______, _______, _______, _______, _______, _______,   RGB_TOG, RGB_RMOD,RGB_MOD, _______, _______, _______, _______,
+  QK_BOOT,  _______, _______, _______, _______, _______, RGB_TOG,   _______, RGB_RMOD,RGB_MOD, _______, _______, _______, _______,
                               _______, _______, _______, _______,   _______, _______, _______, _______
 ),
 
@@ -78,13 +79,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
+#ifdef ENCODER_ENABLE
+
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
+    [_BASE] =   { ENCODER_CCW_CW(KC_WH_U, KC_WH_D) },
+    [_LOWER] =  { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_RAISE] =  { ENCODER_CCW_CW(KC_WH_L, KC_WH_R) },
+    [_FN] =     { ENCODER_CCW_CW(KC_WH_U, KC_WH_D) },
+    [_MENU] =   { ENCODER_CCW_CW(RGB_VAD, RGB_VAI) },
+    [_NAV] =    { ENCODER_CCW_CW(KC_WH_U, KC_WH_D) },
+};
+
+#endif
+
+#endif
+
 #ifdef OLED_ENABLE
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
   if (!is_keyboard_master()) {
     return OLED_ROTATION_180;
   }
-  return rotation;
+  return OLED_ROTATION_270;
 }
 
 void render_logo(void) {
@@ -131,7 +148,7 @@ static void print_status_narrow(void) {
     // Print current layer
     oled_write_ln_P(PSTR("LAYER"), false);
     switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
+        case _BASE:
             oled_write_P(PSTR("Base"), false);
             break;
         case _RAISE:
@@ -162,28 +179,6 @@ bool oled_task_user(void) {
         render_logo();
     }
     return false;
-}
-
-#endif
-
-#ifdef ENCODER_ENABLE
-
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        if (clockwise) {
-            tap_code(KC_WH_U);
-        } else {
-            tap_code(KC_WH_D);
-        }
-    } else if (index == 1) {
-        if (!clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
-    }
-
-    return true;
 }
 
 #endif
