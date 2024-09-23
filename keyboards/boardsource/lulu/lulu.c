@@ -1,6 +1,7 @@
 // Copyright 2022 Cole Smith <cole@boadsource.xyz>
 // SPDX-License-Identifier: GPL-2.0-or-later
 #include "quantum.h"
+#include "lib/oled.h"
 
 #ifdef ENCODER_ENABLE
 bool encoder_update_kb(uint8_t index, bool clockwise) {
@@ -21,15 +22,6 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
     return true;
 }
 #endif
-
-#if 0 // DISABLE OLED
-#ifdef OLED_ENABLE
-oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
-  if (!is_keyboard_master()) {
-    return OLED_ROTATION_180;
-  }
-  return rotation;
-}
 
 void render_layer1_logo(void){
     static const char PROGMEM layer_logo[] = {
@@ -237,15 +229,3 @@ void process_layer_state(void) {
             break;
     }
 }
-
-bool oled_task_kb(void) {
-    if (!oled_task_user()) { return false; }
-    if (is_keyboard_master()) {
-        process_layer_state();
-    } else {
-        render_logo();
-    }
-    return false;
-}
-#endif
-#endif // DISABLE OLED
