@@ -71,7 +71,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_NAV] = LAYOUT(
-  _______,  _______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______,
+  _______,  _______, _______, _______, _______, _______,                     KC_MPRV, KC_MSTP, KC_MPLY, KC_MNXT, _______, _______,
   _______,  A(KC_1), A(KC_2), A(KC_3), _______, _______,                     _______, _______, G(KC_1), G(KC_2), G(KC_3), _______,
   _______,  A(KC_4), A(KC_5), A(KC_6), _______, _______,                     _______, _______, G(KC_4), G(KC_5), G(KC_6), _______,
   _______,  A(KC_7), A(KC_8), A(KC_9), _______, _______, _______,   _______, _______, _______, G(KC_7), G(KC_8), G(KC_9), _______,
@@ -80,7 +80,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 #ifdef ENCODER_ENABLE
-
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [_BASE] =   { ENCODER_CCW_CW(KC_WH_U, KC_WH_D) },
@@ -91,9 +90,8 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [_NAV] =    { ENCODER_CCW_CW(KC_WH_U, KC_WH_D) },
 };
 
-#endif
-
-#endif
+#endif // defined(ENCODER_MAP_ENABLE)
+#endif // ENCODER_ENABLE
 
 #ifdef OLED_ENABLE
 
@@ -384,4 +382,4 @@ bool oled_task_user(void) {
     return false;
 }
 
-#endif
+#endif // OLED_ENABLE
