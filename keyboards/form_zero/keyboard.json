@@ -1,7 +1,7 @@
 {
-    "manufacturer": "happens",
+    "manufacturer": "happy",
     "keyboard_name": "control",
-    "maintainer": "phamfoo",
+    "maintainer": "happens",
     "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
     "features": {
