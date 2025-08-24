@@ -16,16 +16,6 @@
 
 #pragma once
 
-#ifndef BOOTMAGIC_LITE_ROW
-#    define BOOTMAGIC_LITE_ROW 0
-#endif
-#ifndef BOOTMAGIC_LITE_COLUMN
-#    define BOOTMAGIC_LITE_COLUMN 1
-#endif
-
-#ifndef BOOTMAGIC_LITE_ROW_RIGHT
-#    define BOOTMAGIC_LITE_ROW_RIGHT 4
-#endif
-#ifndef BOOTMAGIC_LITE_COLUMN_RIGHT
-#    define BOOTMAGIC_LITE_COLUMN_RIGHT 1
+#ifndef OLED_FONT_H
+#    define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 #endif
